@@ -50,6 +50,14 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void onResetPressed() {
+    setState(() {
+      isRunning = false;
+      totalSeconds = twentyFiveMinutes;
+    });
+    timer.cancel();
+  }
+
   String format(int seconds) {
     var duration = Duration(seconds: seconds);
     var data = duration.toString().split(".").first.split(":");
@@ -80,13 +88,31 @@ class _HomeScreenState extends State<HomeScreen> {
             flex: 2,
             child: Container(
               child: Center(
-                child: IconButton(
-                  iconSize: 120,
-                  color: Theme.of(context).cardColor,
-                  onPressed: isRunning ? onPausePressed : onStartPressed,
-                  icon: Icon(isRunning
-                      ? Icons.pause_circle_outline
-                      : Icons.play_circle_outline),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    IconButton(
+                      iconSize: 120,
+                      color: Theme.of(context).cardColor,
+                      onPressed: isRunning ? onPausePressed : onStartPressed,
+                      icon: Icon(isRunning
+                          ? Icons.pause_circle_outline
+                          : Icons.play_circle_outline),
+                    ),
+                    !isRunning && totalSeconds == twentyFiveMinutes
+                        ? const SizedBox(height: 48)
+                        : TextButton(
+                            onPressed: onResetPressed,
+                            child: Text(
+                              "Reset",
+                              style: TextStyle(
+                                color: Theme.of(context).cardColor,
+                                fontSize: 20,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                  ],
                 ),
               ),
             ),
